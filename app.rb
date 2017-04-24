@@ -15,18 +15,13 @@ ActiveRecord::Base.establish_connection(
     database: './my_blog_development.sqlite2',
     reaping_frequency: 4
     # pool:     20   # 在连接数据库的定时任务很多时，会出现could not connect to database的问题。
-                     # 将该参数增加，但不宜过大，以免造成pg too many clients的问题。
-                     # 可以再增加一个定时脚本减轻单个activerecord连接数据库的pool数。
+                     # 将该参数增加，但不宜过大，以免造成too many clients的问题。
 )
 
 
-
-
 # p ActiveRecord::Base.connection.tables
-# p Master.take
 # modular the Sinatra app
 # can run it in config.ru
-
 class MyApp < Sinatra::Application
   set :protection, :except => :json_csrf # 使前端ajax可以跨域访问
 
