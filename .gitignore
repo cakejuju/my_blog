@@ -1,5 +1,5 @@
 /bin/
-./*.sqlite2
+/*.sqlite2
 .rbenv-gemsets   
 .ruby-version
 Gemfile.lock
