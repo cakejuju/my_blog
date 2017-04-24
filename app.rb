@@ -20,18 +20,24 @@ ActiveRecord::Base.establish_connection(
 )
 
 
+
+
 # p ActiveRecord::Base.connection.tables
 # p Master.take
 # modular the Sinatra app
 # can run it in config.ru
 
 class MyApp < Sinatra::Application
+  set :protection, :except => :json_csrf # 使前端ajax可以跨域访问
+
   get '/' do
     send_file './views/index.html'
   end
 
   get '/get_some_data' do
-    {hi: 'this is your data'}
+    content_type :json
+    {hi: 'this is your data'}.to_json
+    # "dsdssdds"
   end
 
   get '/hello/:name' do |n|
