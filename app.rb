@@ -3,6 +3,7 @@ require 'active_record'
 require "sinatra/activerecord"
 require "sqlite3"
 
+# rerun ./bin/puma
 # p Gem.loaded_specs.values.map {|x| "#{x.name} #{x.version}"}
 # p ENV
 
@@ -13,26 +14,24 @@ require "sqlite3"
 ActiveRecord::Base.establish_connection(
     adapter: "sqlite3",
     database: './my_blog_development.sqlite2',
-    reaping_frequency: 4
-    # pool:     20   # 在连接数据库的定时任务很多时，会出现could not connect to database的问题。
-                     # 将该参数增加，但不宜过大，以免造成too many clients的问题。
+    reaping_frequency: 4,
+    pool:     6   
 )
 
+# require models
+Dir['./models/*.rb'].each { |file| require_relative file }
 
 # p ActiveRecord::Base.connection.tables
 # modular the Sinatra app
 # can run it in config.ru
+
+
 class MyApp < Sinatra::Application
   set :protection, :except => :json_csrf # 使前端ajax可以跨域访问
-
-  get '/' do
-    send_file './views/index.html'
-  end
 
   get '/get_some_data' do
     content_type :json
     {hi: 'this is your data'}.to_json
-    # "dsdssdds"
   end
 
   get '/hello/:name' do |n|
@@ -42,5 +41,11 @@ class MyApp < Sinatra::Application
     "Hello #{n}! and #{params['name']}"
   end
 end
+
+Dir['./helpers/*.rb'].each { |file| require_relative file }
+# require_relative './helpers/api_helper'
+# 导入所有 api routes 打开类的方式
+Dir['./api_routes/*.rb'].each { |file| require_relative file }
+
 
 

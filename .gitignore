@@ -3,3 +3,4 @@
 .rbenv-gemsets   
 .ruby-version
 Gemfile.lock
+/db/schema.rb
