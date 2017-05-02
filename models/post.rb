@@ -6,4 +6,19 @@ class Post < ActiveRecord::Base
     second_time_to_text(Time.now - self.created_at)
   end
 
+  def tag_names
+    self.tags.as_json(only: [:id, :name])
+  end
+
+  def l_content
+    if self.content.to_s.size > 300
+      content = self.content[0..300] + '.....'
+      # TODO
+      # if content.include?('<img>')
+      # end
+    else 
+      self.content
+    end
+  end
+
 end

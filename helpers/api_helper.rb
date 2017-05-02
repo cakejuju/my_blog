@@ -2,7 +2,7 @@ class  MyApp
   def model_get_data(params)
     begin
       params = params.with_indifferent_access # hash 可以用 symbol 或 string 取值
-
+      p params
       # 获取limit, current_page , model, 必填参数
       limit = params[:limit].to_i
       limit = 30 if limit == 0
@@ -14,11 +14,25 @@ class  MyApp
 
       period = params[:period]
 
-      if period.present?
-        queried_data = model.where(:created_at => period[:begin_time].to_datetime.to_datetime..period[:end_time].to_datetime.to_datetime)
+      # 获取关联对象
+
+      data_ids = params[:related_object] ? get_ids(model, params[:related_object]) : nil
+
+
+      if data_ids.present?
+        queried_data = model.where(id: data_ids)
       else
-        queried_data = model.all                  
+        queried_data = model.all      
       end
+      # p queried_data
+      if period.present?
+        queried_data = queried_data.where(:created_at => period[:begin_time].to_datetime.to_datetime..period[:end_time].to_datetime.to_datetime)
+      end
+      # if period.present?
+      #   queried_data = model.where(:created_at => period[:begin_time].to_datetime.to_datetime..period[:end_time].to_datetime.to_datetime)
+      # else
+      #   queried_data = model.all                  
+      # end
 
       include_model = params[:include_model]
 
@@ -70,15 +84,55 @@ class  MyApp
 
       json_data = relation_data.as_json(as_json_options)
 
-      return { success: 1,
-               total_pages: total_pages,
-               current_page: current_page,
-               counts: queried_data.size,
-               json_data: json_data,
-               relation_data: relation_data }
+      returned_data = { success: 1,
+                        total_pages: total_pages,
+                        current_page: current_page,
+                        counts: queried_data.size,
+                        json_data: json_data }
+      returned_data.merge!({ relation_data: relation_data }) if params[:relation_data] 
+            
+      return returned_data
     rescue Exception => e
       return {success: 0, reason: e.to_s}
     end
+  end
+
+  private
+  # 注意 group 只能是 id
+  # related_object => {through_model: 'Pt', related_model: 'Tag', key: 'tag_id', value: [1,2,3], group: 'post_id'}
+  def get_ids(model, related_object)
+    # 中间模型
+    through_model = str2model(related_object[:through_model]) # Pt Pt.where(tag_id: [1,2]).group(:post_id).size.keys
+    # 关联的模型 查询条件模型
+    related_model = str2model(related_object[:related_model]) # Tag 
+
+    key = related_object[:key]
+    value = related_object[:value]
+    group = related_object[:group]
+
+    # 被 group 的模型 id, 即要得出数据的模型
+    grouped_model_ids = through_model.where(key => value).group(group).size.keys
+    # p grouped_model_ids
+    objs = model.where(id: grouped_model_ids)
+    new_ids = []
+    objs.each do |obj|
+      related_ids = obj.send(plural_name(related_model)).group(:id).size.keys
+      # p "related_ids is: " + related_ids.to_s
+      if value - related_ids == []
+        new_ids << obj.id
+      end
+    end
+
+    new_ids
+
+  end
+
+  def plural_name(model)
+    ActiveModel::Naming.plural(model)
+  end
+
+  def str2model(str)
+    str.to_s.constantize
   end
 
 end
