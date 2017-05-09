@@ -10,6 +10,7 @@ class MyApp < Sinatra::Application
   end  
 
   post '/get_posts_by_id' do
+    p session
     params = JSON.parse(request.body.read)
 
     content_type :json

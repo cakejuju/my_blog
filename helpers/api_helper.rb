@@ -117,14 +117,13 @@ class  MyApp
     new_ids = []
     objs.each do |obj|
       related_ids = obj.send(plural_name(related_model)).group(:id).size.keys
-      # p "related_ids is: " + related_ids.to_s
+
       if value - related_ids == []
         new_ids << obj.id
       end
     end
 
     new_ids
-
   end
 
   def plural_name(model)
@@ -133,6 +132,32 @@ class  MyApp
 
   def str2model(str)
     str.to_s.constantize
+  end
+
+  def jwt_encode(data)
+    algorithm = 'HS256'
+    exp = Time.now.to_i + 0.1 * 3600
+    payload = {:exp => exp, :iss => 'joey'}.merge!(data)
+    hmac_secret = '--A Secret--'
+    return JWT.encode payload, hmac_secret, algorithm
+  end
+
+  def jwt_decode(token)
+    begin
+      algorithm = 'HS256'
+      hmac_secret = '--A Secret--'
+      return JWT.decode token, hmac_secret, true, { :algorithm => algorithm }
+    rescue JWT::ExpiredSignature
+      # Handle expired token, e.g. logout user or deny access
+    end
+  end
+
+  def SHA1(str)
+    Digest::SHA1.hexdigest(str)
+  end
+  
+  def MD5(str)
+    Digest::MD5.hexdigest(str)
   end
 
 end

@@ -1,6 +1,8 @@
 class Post < ActiveRecord::Base
   has_and_belongs_to_many :tags
   has_many :pts, dependent: :destroy
+  has_many :comments, dependent: :destroy
+  
   validates :title, uniqueness: true
 
   def written_time

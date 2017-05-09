@@ -15,3 +15,7 @@ gem 'puma'
 group :development do
   gem "rerun"  # change the file and auto reload
 end
+
+gem 'jwt'
+
+# gem 'sinatra-contrib', '~> 2.0' # cookie

@@ -1,9 +1,14 @@
 require 'sinatra/base'
+# require "sinatra/cookies"
 require 'active_record'
 require "sinatra/activerecord"
 require "sqlite3"
 
-# rerun ./bin/puma
+require 'jwt' # json web token
+
+
+
+# development 启动方式 rerun ./bin/puma
 # p Gem.loaded_specs.values.map {|x| "#{x.name} #{x.version}"}
 # p ENV
 
@@ -29,8 +34,10 @@ Dir['./models/*.rb'].each { |file| require_relative file }
 class MyApp < Sinatra::Application
   set :protection, :except => :json_csrf # 使前端ajax可以跨域访问
 
+
   get '/get_some_data' do
     content_type :json
+
     {hi: 'this is your data'}.to_json
   end
 
@@ -44,7 +51,7 @@ end
 
 Dir['./helpers/*.rb'].each { |file| require_relative file }
 # require_relative './helpers/api_helper'
-# 导入所有 api routes 打开类的方式
+# 导入所有 api routes 这是使用打开类添加路由
 Dir['./api_routes/*.rb'].each { |file| require_relative file }
 
 

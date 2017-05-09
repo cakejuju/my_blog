@@ -22,3 +22,9 @@ Pt.create!(post_id: 1, tag_id: 2)
 Pt.create!(post_id: 2, tag_id: 3)
 Pt.create!(post_id: 3, tag_id: 4)
 Pt.create!(post_id: 5, tag_id: 3)
+
+# TODO 
+# 添加 member 和 comment 数据
+# 管理员
+# Member.create!()
+Member.create!(nickname: 'Joey', username: 'cakejuju', password: 'jj12321', email: '', is_master: true)
