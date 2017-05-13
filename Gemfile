@@ -18,4 +18,6 @@ end
 
 gem 'jwt'
 
-# gem 'sinatra-contrib', '~> 2.0' # cookie
+gem 'sinatra-contrib', '~> 2.0' # cookie
+
+gem 'redcarpet' # convert markdown to html string

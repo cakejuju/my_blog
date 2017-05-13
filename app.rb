@@ -1,12 +1,10 @@
 require 'sinatra/base'
-# require "sinatra/cookies"
+require "sinatra/cookies"
 require 'active_record'
 require "sinatra/activerecord"
 require "sqlite3"
-
 require 'jwt' # json web token
-
-
+require 'redcarpet'
 
 # development 启动方式 rerun ./bin/puma
 # p Gem.loaded_specs.values.map {|x| "#{x.name} #{x.version}"}
@@ -34,6 +32,11 @@ Dir['./models/*.rb'].each { |file| require_relative file }
 class MyApp < Sinatra::Application
   set :protection, :except => :json_csrf # 使前端ajax可以跨域访问
 
+  before do
+    @params = JSON.parse(request.body.read).with_indifferent_access 
+
+    content_type :json
+  end 
 
   get '/get_some_data' do
     content_type :json

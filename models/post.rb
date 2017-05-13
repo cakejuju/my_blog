@@ -4,6 +4,7 @@ class Post < ActiveRecord::Base
   has_many :comments, dependent: :destroy
   
   validates :title, uniqueness: true
+  validates :content, presence: true
 
   def written_time
     second_time_to_text(Time.now - self.created_at)

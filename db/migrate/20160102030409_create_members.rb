@@ -7,6 +7,7 @@ class CreateMembers < ActiveRecord::Migration
       t.string   :password
       t.string   :email
       t.boolean  :is_master
+      t.string   :head_img_url, default: ''
       t.timestamps
     end
   end

@@ -54,7 +54,7 @@ class  MyApp
 
       if query_params.present?
         query_params.each do |key, value|
-          value = value == 'nil' ? nil : value.split(',')
+          value = value == 'nil' ? nil : (value.is_a?(Array) ?  value.split(',') : value)
           queried_data = queried_data.where(key => value)
         end
       end
@@ -93,7 +93,7 @@ class  MyApp
             
       return returned_data
     rescue Exception => e
-      return {success: 0, reason: e.to_s}
+      return {success: 0, msg: e.to_s}
     end
   end
 
@@ -136,7 +136,7 @@ class  MyApp
 
   def jwt_encode(data)
     algorithm = 'HS256'
-    exp = Time.now.to_i + 0.1 * 3600
+    exp = Time.now.to_i + 3600 * 10 
     payload = {:exp => exp, :iss => 'joey'}.merge!(data)
     hmac_secret = '--A Secret--'
     return JWT.encode payload, hmac_secret, algorithm
@@ -146,18 +146,60 @@ class  MyApp
     begin
       algorithm = 'HS256'
       hmac_secret = '--A Secret--'
-      return JWT.decode token, hmac_secret, true, { :algorithm => algorithm }
+      data = JWT.decode token, hmac_secret, true, { :algorithm => algorithm }
+      {success: 1, data: data, msg: 'success'}
     rescue JWT::ExpiredSignature
-      # Handle expired token, e.g. logout user or deny access
+      {success: 0, msg: '登陆信息过期辣'}
+    rescue Exception => e
+      {success: 0, msg: e.to_s}
     end
   end
 
   def SHA1(str)
     Digest::SHA1.hexdigest(str)
   end
-  
+
   def MD5(str)
     Digest::MD5.hexdigest(str)
   end
+
+  def current_member
+    token = cookies[:jwt]
+    return false unless token
+    p token
+    decode_info = jwt_decode(token)
+
+    if decode_info[:success] == 1
+      # decode_info[:data] =>  
+
+      # [{"exp"=>1494592675, "iss"=>"joey", "member_id"=>1, "is_master"=>true, "head_img_url"=>"", "username"=>"cakejuju"}, 
+      # {"typ"=>"JWT", "alg"=>"HS256"}]
+      FlexibleObject.new decode_info[:data][0]
+    else 
+      nil
+    end
+  end
+  
+  # 评论优化
+  # /n => /n/n
+  # # => #### ## => ####  ### => ####
+  def polish_comment(str)
+    str = str.two_slashN
+    arr = str.split("\n")
+    arr.each_with_index do |v, index|
+      if v.include?("#####")
+      elsif v.include?("#### ")
+      elsif v.include?("### ")
+        arr[index] = v.gsub!("### ","#### ")
+      elsif v.include?("## ")
+        arr[index] = v.gsub!("## ","#### ")
+      elsif v.include?("# ")
+        arr[index] = v.gsub!("# ","#### ")
+      end
+    end
+    str = arr.join("\n")
+    str
+  end
+
 
 end
