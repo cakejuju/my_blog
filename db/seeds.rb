@@ -29,3 +29,5 @@ Pt.create!(post_id: 4, tag_id: 2)
 # 管理员
 # Member.create!()
 Member.create!(nickname: 'Joey', username: 'cakejuju', password: 'jj12321', email: '', is_master: true)
+
+Member.create!(nickname: 'Emmett', username: 'putiful', password: 'jj12321', email: 'cc@aa.com', is_master: false)
