@@ -18,7 +18,6 @@ class  MyApp
 
       data_ids = params[:related_object] ? get_ids(model, params[:related_object]) : nil
 
-
       if data_ids.present?
         queried_data = model.where(id: data_ids)
       else
@@ -28,11 +27,6 @@ class  MyApp
       if period.present?
         queried_data = queried_data.where(:created_at => period[:begin_time].to_datetime.to_datetime..period[:end_time].to_datetime.to_datetime)
       end
-      # if period.present?
-      #   queried_data = model.where(:created_at => period[:begin_time].to_datetime.to_datetime..period[:end_time].to_datetime.to_datetime)
-      # else
-      #   queried_data = model.all                  
-      # end
 
       include_model = params[:include_model]
 
@@ -73,7 +67,7 @@ class  MyApp
 
       total_pages = (queried_data.size / limit.to_f).ceil  # 向上取整
 
-      offset = limit*(current_page -1)  # 分页左边起始位置
+      offset = limit*(current_page - 1)  # 分页左边起始位置
 
       relation_data = queried_data.limit(limit).offset(offset)
 
@@ -199,6 +193,36 @@ class  MyApp
     end
     str = arr.join("\n")
     str
+  end
+
+  def login_member_info(member)
+    jwt = jwt_encode({ member_id: member.id, 
+                       is_master: member.is_master,
+                       head_img_url: member.head_img_url,
+                       username: member.username,
+                       nickname: member.nickname,
+                       email:    member.email})
+
+    data = { nickname: member.nickname, head_img_url: member.head_img_url, email: member.email }
+
+    {jwt: jwt, current_member: data}.suc_json 
+  end
+
+  # 又拍云上传
+  def up_upload(local_file_path, cloud_save_path)
+    key = "ZvmSM4XlWxmvJ6th7K9HR2BjXH0="
+    bucket = 'blog-src'
+
+    upyun = Upyun::Form.new(key, bucket, {})
+
+    opts = {
+      'save-key' => cloud_save_path,
+      'content-type' => 'image/jpeg',
+      'image-width-range' => '0,22024',
+      'return-url' => ''
+    }    
+
+    res = upyun.upload(local_file_path, opts)
   end
 
 
