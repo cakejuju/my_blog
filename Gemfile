@@ -23,3 +23,5 @@ gem 'sinatra-contrib', '~> 2.0' # cookie
 gem 'redcarpet' # convert markdown to html string
 
 gem 'upyun', '~> 1.0.8' # 又拍云 SDK
+
+gem 'settingslogic' # parse yml to hash

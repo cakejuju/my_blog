@@ -5,3 +5,5 @@
 Gemfile.lock
 /db/schema.rb
 /.idea/
+/config/development.yml
+/config/production.yml

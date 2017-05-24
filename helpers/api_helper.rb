@@ -210,8 +210,10 @@ class  MyApp
 
   # 又拍云上传
   def up_upload(local_file_path, cloud_save_path)
-    key = "ZvmSM4XlWxmvJ6th7K9HR2BjXH0="
-    bucket = 'blog-src'
+    config = FlexibleObject.new(Settings.UPyun)
+
+    key = config.key
+    bucket = config.bucket
 
     upyun = Upyun::Form.new(key, bucket, {})
 

@@ -6,3 +6,10 @@ namespace :db do
     require "./app"
   end
 end
+
+# 重启任务
+# 指令: rake restart env=#{env}
+task :restart do
+  env = ENV['env'] ? ENV['env'] : 'development'
+  p ENV
+end
