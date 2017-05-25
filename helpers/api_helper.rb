@@ -214,7 +214,8 @@ class  MyApp
 
     key = config.key
     bucket = config.bucket
-
+    # upyun = Upyun::Rest.new('blog-src', 'admin2', 'jj930328')
+    # file = upyun.get('/production/heads')
     upyun = Upyun::Form.new(key, bucket, {})
 
     opts = {

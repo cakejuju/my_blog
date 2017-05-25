@@ -1,0 +1,6 @@
+# 申请一个又拍云账号 在这里填入 用来管理图片上传 
+UPyun:
+  bucket:   '' # 空间名 必填
+  key:      '' # form提交的key 必填
+  admin:    '' # 非必填
+  password: '' # 非必填

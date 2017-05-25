@@ -45,7 +45,7 @@ Dir['./helpers/*.rb'].each { |file| require_relative file }
 
 ActiveRecord::Base.establish_connection(
     adapter: "sqlite3",
-    database: './my_blog_development.sqlite2',
+    database: "./db/my_blog_#{ENV['RACK_ENV']}.sqlite3",
     reaping_frequency: 4,
     pool:     6   
 )

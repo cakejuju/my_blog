@@ -1,3 +1,7 @@
+
+# https://github.com/e2/ruby_dep/wiki/Disabling-warnings
+ENV['RUBY_DEP_GEM_SILENCE_WARNINGS'] = '1' # Disabling warnings
+
 source 'https://gems.ruby-china.org'
 
 gem 'sinatra'
