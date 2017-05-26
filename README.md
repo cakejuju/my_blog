@@ -26,7 +26,6 @@ $ ./bin/rake init_service
 
 ### production
 
-
 ```bash
 $ bundle install --binstubs
 

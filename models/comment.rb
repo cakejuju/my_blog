@@ -19,4 +19,5 @@ class Comment < ActiveRecord::Base
   def written_time
     second_time_to_text(Time.now - self.created_at)
   end
+
 end

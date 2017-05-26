@@ -160,7 +160,7 @@ class  MyApp
   def current_member
     token = cookies[:jwt]
     return false unless token
-    p token
+
     decode_info = jwt_decode(token)
 
     if decode_info[:success] == 1
@@ -203,7 +203,7 @@ class  MyApp
                        nickname: member.nickname,
                        email:    member.email})
 
-    data = { nickname: member.nickname, head_img_url: member.head_img_url, email: member.email }
+    data = {is_master: member.is_master, nickname: member.nickname, head_img_url: member.head_img_url, email: member.email }
 
     {jwt: jwt, current_member: data}.suc_json 
   end
@@ -227,6 +227,8 @@ class  MyApp
 
     res = upyun.upload(local_file_path, opts)
   end
+
+
 
 
 end

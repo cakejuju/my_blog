@@ -4,7 +4,7 @@ class MyApp < Sinatra::Application
     begin
       member = current_member
       if member
-        data = { nickname: member.nickname, head_img_url: member.head_img_url, email: member.email }
+        data = { nickname: member.nickname, head_img_url: member.head_img_url, email: member.email, is_master: member.is_master }
 
         {current_member: data}.suc_json
       else 

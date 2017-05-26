@@ -25,4 +25,7 @@ class Post < ActiveRecord::Base
     end
   end
 
+  def created_strftime
+    self.created_at.strftime("%Y年%-m月%-d日")
+  end
 end
