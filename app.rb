@@ -52,7 +52,7 @@ ActiveRecord::Base.establish_connection(
 
 # 导入所有 api routes 这是使用打开类添加路由
 Dir['./api_routes/*.rb'].each { |file| require_relative file }
-
+Dir['./api_routes/admin/*.rb'].each { |file| require_relative file }
 # require models
 Dir['./models/*.rb'].each { |file| require_relative file }
 

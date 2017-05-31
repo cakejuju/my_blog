@@ -228,6 +228,18 @@ class  MyApp
     res = upyun.upload(local_file_path, opts)
   end
 
+  # 又拍云显示路径下文件
+  def show_image_cloud_file_lists(url)
+    config = FlexibleObject.new(Settings.UPyun)
+
+    bucket = config.bucket  
+    admin =   config.admin
+    password = config.password
+
+    upyun = Upyun::Rest.new(bucket, admin, password)
+    upyun.getlist(url)
+  end
+
 
 
 

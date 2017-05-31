@@ -32,6 +32,7 @@ class MyApp < Sinatra::Application
       if tempfile_path.present?
         # comments articles heads
         cloud_save_path = "/production/heads/#{File.basename(tempfile_path)}"
+        
         p cloud_save_path
 
         res = up_upload(tempfile_path, cloud_save_path)
@@ -39,7 +40,7 @@ class MyApp < Sinatra::Application
         # => {:sign=>"229ddc675e70d734c703502b1c12668e", :code=>200, :file_size=>5239, :url=>"/2017/05/18/yace_jiami.rb", :time=>1495099874, :message=>"ok", :mimetype=>"text/plain; charset=utf-8", :request_id=>"15f8307656c8a18741dcdc9925c3cde2"}
         return {msg: "图片上传失败了: #{res[:message]}"}.fail_json unless res[:code] == 200
 
-        head_img_url = "http://blog-src.b0.upaiyun.com#{res[:url]}"
+        head_img_url = "#{Settings.UPyun.url_prefix}#{res[:url]}"
       else 
         head_img_url = "/static/github.png" 
       end

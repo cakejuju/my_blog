@@ -12,19 +12,4 @@ class MyApp < Sinatra::Application
   end 
 
 
-  post '/admin/login' do
-    username = @params['username'].to_s
-    password = @params['password'].to_s
-
-    member = Member.find_by(username: username, password: SHA1(password))
-
-    if member
-      login_member_info(member)
-    else 
-      {success: 0, msg: '账号或密码输错了吧'}.to_json
-    end
-  end
-
-
-
 end
