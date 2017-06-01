@@ -2,5 +2,9 @@
 UPyun:
   bucket:   '' # 空间名 必填
   key:      '' # form提交的key 必填
-  admin:    '' # 非必填
-  password: '' # 非必填
+  admin:    '' # 必填 
+  password: '' # 必填
+  url_prefix: '' # 必填 http://blog-src.b0.upaiyun.com
+
+
+env: '' # production

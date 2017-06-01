@@ -130,7 +130,7 @@ class  MyApp
 
   def jwt_encode(data)
     algorithm = 'HS256'
-    exp = Time.now.to_i + 3600 * 10 
+    exp = Time.now.to_i + 3600 * 48 
     payload = {:exp => exp, :iss => 'joey'}.merge!(data)
     hmac_secret = '--A Secret--'
     return JWT.encode payload, hmac_secret, algorithm
@@ -228,15 +228,20 @@ class  MyApp
     res = upyun.upload(local_file_path, opts)
   end
 
-  # 又拍云显示路径下文件
-  def show_image_cloud_file_lists(url)
+  def init_UPyun
     config = FlexibleObject.new(Settings.UPyun)
 
     bucket = config.bucket  
     admin =   config.admin
     password = config.password
 
-    upyun = Upyun::Rest.new(bucket, admin, password)
+    upyun = Upyun::Rest.new(bucket, admin, password)   
+  end
+
+  # 又拍云显示路径下文件
+  def show_image_cloud_file_lists(url)
+    upyun = init_UPyun
+    
     upyun.getlist(url)
   end
 

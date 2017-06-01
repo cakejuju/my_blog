@@ -1,11 +1,11 @@
 class MyApp < Sinatra::Application
-  
+
   # admin 路由的 filter, 验证登录与权限
   before '/admin/*' do
     if request.env["REQUEST_URI"] != "/admin/login"
       @member = current_member
 
-      if @member == false
+      if @member == false ||  @member.nil?
         halt 403, "咖喱boomboom"
       end
 
