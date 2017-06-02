@@ -7,18 +7,22 @@ class MyApp < Sinatra::Application
   end  
 
   post '/get_posts_by_id' do
-    post = Post.where(id: @params['id']).take
-    if post
-      earlier_post = Post.where('created_at < ?', post.created_at).order('created_at DESC').limit(1).take
-      later_post = Post.where('created_at > ?', post.created_at).limit(1).take
-      data = { earlier_post: earlier_post,
-               later_post: later_post,
-               post: post.as_json(methods:['written_time', 'tag_names', 'l_content']) }     
-    else
-      data = {}          
-    end
+    begin
+      post = Post.where(id: @params['id']).take
+      if post
+        earlier_post = Post.where('created_at < ?', post.created_at).order('created_at DESC').limit(1).take
+        later_post = Post.where('created_at > ?', post.created_at).limit(1).take
+        data = { earlier_post: earlier_post,
+                 later_post: later_post,
+                 post: post.as_json(methods:['written_time', 'tag_names', 'l_content']) }     
+      else
+        data = {}          
+      end
 
-    data.to_json
+      data.suc_json
+    rescue Exception => e
+      {msg: e.to_s}.fail_json
+    end
   end  
 
   # post '/get_posts_by_title' do

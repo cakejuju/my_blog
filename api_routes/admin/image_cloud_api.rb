@@ -24,13 +24,13 @@ class MyApp < Sinatra::Application
   post '/admin/image_cloud/delete_file' do
     begin
       upyun = init_UPyun
+
       file_path = @params[:file_path]
-      # total_path = Settings.UPyun.url_prefix + '/' + file_path
-      p file_path
-      res = upyun.delete(file_path)
+
+      res = upyun.delete(file_path) # true false
+      # 删除文件夹时 若其中有内容 则无法删除
       p res
-      # {}.suc_json if res
-      res ? {}.suc_json : {msg: '删除失败'}.fail_json
+      res == true ? {}.suc_json : {msg: '删除失败'}.fail_json
     rescue Exception => e
       {success: 0, msg: e.to_s}.fail_json
     end

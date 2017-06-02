@@ -10,6 +10,4 @@ class MyApp < Sinatra::Application
       {success: 0, msg: '好像还没这个账号'}.to_json
     end
   end 
-
-
 end
