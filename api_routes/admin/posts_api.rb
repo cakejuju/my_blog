@@ -7,6 +7,27 @@ class MyApp < Sinatra::Application
     model_get_data(@params).suc_json
   end
 
+  post '/admin/posts/create' do 
+    # 新建博客
+    begin
+      title = @params[:title]
+      return {msg: 'missing title'}.fail_json unless title.present?
+
+      content = @params[:content]
+
+      post = Post.create!(title: title, content: content)
+      # 绑定 tags
+      parma_tags = @params[:tags].split('|') # => ['ruby','py']
+      parma_tags.each do |tag_name|
+        tag = find_the_tag_or_create(tag_name)
+        Pt.create(tag_id: tag.id, post_id: post.id)
+      end
+      {post: post}.suc_json
+    rescue Exception => e
+      {msg: e.to_s}.fail_json
+    end
+  end
+
   post '/admin/posts/update' do 
     # 更新博客
     begin
@@ -26,7 +47,6 @@ class MyApp < Sinatra::Application
       post_tags = post.tags.group(:name).size.keys # => ['py', 'ruby']
       # 更新标签
       # 标签发生变化
-
       need_to_be_del_tags = post_tags - parma_tags
 
       return {}.suc_json if parma_tags.size == post_tags.size && need_to_be_del_tags.empty?
