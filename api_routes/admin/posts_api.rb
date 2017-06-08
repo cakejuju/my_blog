@@ -28,6 +28,17 @@ class MyApp < Sinatra::Application
     end
   end
 
+  post '/admin/posts/update_height' do 
+    begin
+      post_id = @params[:post_id]
+      height = @params[:height].to_i
+      post = Post.find_by(id: post_id)
+      post.update(height: height)
+      {}.suc_json
+    rescue Exception => e
+      {msg: e.to_s}.fail_json
+    end
+  end
   post '/admin/posts/update' do 
     # 更新博客
     begin

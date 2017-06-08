@@ -1,16 +1,18 @@
 class MyApp < Sinatra::Application
 
   post '/get_posts' do
-    @params.merge!({relation_data: true, model: 'Post', json_methods:['written_time', 'tag_names', 'l_content', 'created_strftime']})
+    @params.merge!({relation_data: true, model: 'Post'})
 
     model_data = model_get_data(@params)
 
     relation_data = model_data[:relation_data]
-    queryString = @params[:queryString]
+
+    queryString = @params[:queryString].to_s.delete(" ")
     # 当查询字符串不为空时,按照以下顺讯查询
     # 1: 查询相关 tag 名为此的 post
     # 2: 查询相关 title 名为此的 post
     # 3: 查询相关 content 名为此的 post
+
     if queryString.present?
       posts_id = []
       # 查询相关 tag
@@ -26,13 +28,14 @@ class MyApp < Sinatra::Application
       posts_id += title_posts.group(:id).size.keys if title_posts.present?
 
       # 查询相关 content
-      content_posts = relation_data.where("content LIKE ?", "%#{queryString}%")
-      posts_id += content_posts.group(:id).size.keys if content_posts.present?
+      # content_posts = relation_data.where("content LIKE ?", "%#{queryString}%")
+      # posts_id += content_posts.group(:id).size.keys if content_posts.present?
 
       posts_id.uniq!
 
       relation_data = relation_data.where(id: posts_id)            
     end
+    p "relation_data size is #{relation_data.size}"
     json_data = relation_data.as_json(methods:['written_time', 'tag_names', 'l_content', 'created_strftime'],
                                       only: @params[:json_only])
 
