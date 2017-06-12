@@ -12,3 +12,9 @@ Gemfile.lock
 
 /config/application_*.yml
 !/config/application_default*.yml
+
+/deploy
+
+db/seeds.rb
+
+*.log

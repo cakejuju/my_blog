@@ -7,17 +7,25 @@ require 'jwt' # json web token
 require 'redcarpet'
 require 'upyun' # 又拍云 SDK
 
+# require 'sinatra'
 
 # 使用sqlite3 创建数据库 => ./bin/rake db:create RACK_ENV=#{RACK_ENV}
 
 # run sinatra console by => $ irb -r ./app.rb
-
+# production console => $ RACK_ENV=production irb -r ./app.rb
 # modular the Sinatra app
 # can run it in config.ru
 
 class MyApp < Sinatra::Application
   set :protection, :except => :json_csrf # 使前端ajax可以跨域访问 开发使用,在生产环境用nginx做代理
-
+  configure do
+    # logging is enabled by default in classic style applications,
+    # so `enable :logging` is not needed
+    # p settings.path
+    file = File.new("#{settings.environment}.log", 'a+')
+    file.sync = true
+    use Rack::CommonLogger, file
+  end
   before do
     response['Access-Control-Allow-Origin'] = '*' # 跨域
 
