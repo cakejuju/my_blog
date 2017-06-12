@@ -16,7 +16,7 @@ require 'upyun' # 又拍云 SDK
 # can run it in config.ru
 
 class MyApp < Sinatra::Application
-  set :protection, :except => :json_csrf # 使前端ajax可以跨域访问
+  set :protection, :except => :json_csrf # 使前端ajax可以跨域访问 开发使用,在生产环境用nginx做代理
 
   before do
     response['Access-Control-Allow-Origin'] = '*' # 跨域
