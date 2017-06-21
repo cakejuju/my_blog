@@ -1,12 +1,10 @@
 class MyApp < Sinatra::Application
 
   post '/upload/head_img' do 
-    begin
+    api_should do
       tempfile = @params['file']['tempfile']
       
-      {file_path: tempfile.path}.suc_json
-    rescue Exception => e
-      {msg: e.to_s}.fail_json
+      {file_path: tempfile.path} 
     end
   end
 

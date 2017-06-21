@@ -15,14 +15,7 @@ class Post < ActiveRecord::Base
   end
 
   def l_content
-    if self.content.to_s.size > 300
-      content = self.content[0..300] + '.....'
-      # TODO
-      # if content.include?('<img>')
-      # end
-    else 
-      self.content
-    end
+    self.content
   end
 
   def created_strftime

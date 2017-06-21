@@ -1,15 +1,17 @@
 class MyApp < Sinatra::Application
   post '/admin/get_posts' do 
-    @params.merge!({model: 'Post', 
-                    json_methods:['written_time', 'tag_names', 
-                                  'l_content', 'created_strftime']})
-    
-    model_get_data(@params).suc_json
+    api_should do
+      @params.merge!({model: 'Post', 
+                      json_methods:['written_time', 'tag_names', 
+                                    'l_content', 'created_strftime']})
+      
+      model_get_data(@params)
+    end
   end
 
   post '/admin/posts/create' do 
     # 新建博客
-    begin
+    api_should do
       title = @params[:title]
       return {msg: 'missing title'}.fail_json unless title.present?
 
@@ -22,21 +24,17 @@ class MyApp < Sinatra::Application
         tag = find_the_tag_or_create(tag_name)
         Pt.create(tag_id: tag.id, post_id: post.id)
       end
-      {post: post}.suc_json
-    rescue Exception => e
-      {msg: e.to_s}.fail_json
+      {post: post}
     end
   end
 
   post '/admin/posts/update_height' do 
-    begin
+    api_should do
       post_id = @params[:post_id]
       height = @params[:height].to_i
       post = Post.find_by(id: post_id)
       post.update(height: height)
-      {}.suc_json
-    rescue Exception => e
-      {msg: e.to_s}.fail_json
+      {}
     end
   end
   post '/admin/posts/update' do 

@@ -1,4 +1,14 @@
 class  MyApp
+
+  # 将所有 api 包围 begin rescure
+  def api_should(&block)
+    begin
+      block.call.suc_json
+    rescue Exception => e
+      {success: 0, msg: e.to_s}.fail_json
+    end
+  end
+
   def model_get_data(params)
     begin
       params = params.with_indifferent_access # hash 可以用 symbol 或 string 取值

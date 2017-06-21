@@ -18,3 +18,5 @@ Gemfile.lock
 db/seeds.rb
 
 *.log
+
+.travis.yml

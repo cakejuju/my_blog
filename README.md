@@ -80,7 +80,7 @@ $ rerun ./bin/puma # rerun 热重启
 ### production
 
 ```bash
-$ nohup ./bin/puma -e production &
+$  ./bin/puma -e production -d
 ```
 
 

@@ -1,18 +1,17 @@
 class MyApp < Sinatra::Application
   # 获取当前登录 member
   post '/member/currentMember' do 
-    begin
+    api_should do
       member = current_member
+
       if member
         data = { nickname: member.nickname, head_img_url: member.head_img_url, email: member.email, is_master: member.is_master }
 
-        {current_member: data}.suc_json
+        {current_member: data}
       else 
-        {msg: '尚未登录'}.fail_json
+        return {msg: '尚未登录'}.fail_json
       end
-    rescue Exception => e
-      {msg: e.to_s}.fail_json
-    end 
+    end
   end
 
 

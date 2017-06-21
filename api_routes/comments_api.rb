@@ -40,15 +40,13 @@ class MyApp < Sinatra::Application
   end
 
   post '/comments/getData' do 
-    begin
+    api_should do
       @params.merge!({model: @model, json_methods: @json_methods})
     
       data = model_get_data(@params)
       # p data
-      data.to_json 
-    rescue Exception => e
-      {success: 0, msg: e.to_s}.to_json 
-    end 
+      data
+    end
   end
 
 
