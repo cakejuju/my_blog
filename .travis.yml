@@ -1,15 +1,14 @@
 language: ruby
-rbenv:
+rvm:
  - 2.3.0
  - 2.3.1
- - 1.4.0
  - 2.1.4
 
 notifications:      
   email: true
 
 sudo: false
-before_install: gem install bundler -v 1.11.2
+before_install: gem install bundler 
 install:
   - bundle install --binstubs
   - ./bin/rake init_service 
