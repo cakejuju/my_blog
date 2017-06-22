@@ -12,7 +12,8 @@ sudo: false
 before_install: gem install bundler 
 install:
   - bundle install --binstubs
+  - ./bin/rake init_service env=test
   - ./bin/rake db:create
   - ./bin/rake db:migrate
-  - ./bin/rake init_service 
+
 
