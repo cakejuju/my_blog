@@ -19,3 +19,11 @@ task :init_service do
 
   `cp ./config/application_default.yml #{file_path}` unless File.file?(file_path)
 end
+
+
+
+task :test do
+  puts "TODO: test will be add"
+end
+
+task :default => :test
