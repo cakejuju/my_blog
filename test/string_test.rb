@@ -13,6 +13,10 @@ class StringTest < TestBasic
     assert mocked_obj.two_slashN == "\n\n mocked object \n\n"
   end
 
+  # method marked is not used now 
+  def test_marked
+  end
+
   def mocked_obj
     "\n mocked object \n"
   end
