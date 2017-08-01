@@ -5,7 +5,10 @@ class MyApp < Sinatra::Application
       member = current_member
 
       if member
-        data = { nickname: member.nickname, head_img_url: member.head_img_url, email: member.email, is_master: member.is_master }
+        data = { nickname: member.nickname, 
+                 head_img_url: member.head_img_url, 
+                 email: member.email, 
+                 is_master: member.is_master }
 
         {current_member: data}
       else 

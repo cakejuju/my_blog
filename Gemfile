@@ -32,3 +32,9 @@ gem 'upyun', '~> 1.0.8' # 又拍云 SDK
 gem 'settingslogic' # parse yml to hash
 
 # gem 'logger'
+
+group :test do
+  gem "minitest"
+  gem 'rack-test'
+  gem 'database_cleaner'
+end
