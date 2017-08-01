@@ -26,18 +26,14 @@ class HashTest < TestBasic
   #   assert JSON.parse({"success" => 0}.fail_json)["success"] == 0
   # end
 
-  def self.define_test_methods
-    METHODS_NAME.each do |method|
-      define_method ("test_#{method}") do 
-        suc_value = case method
-                    when 'suc_json' then 1
-                    when 'fail_json' then 0
-                    end
-        assert JSON.parse( mocked_obj.send(method) )["success"] == suc_value
-        assert JSON.parse( {"success" => suc_value}.send(method) )["success"] == suc_value
-      end
+  METHODS_NAME.each do |method|
+    define_method ("test_#{method}") do 
+      suc_value = case method
+                  when 'suc_json' then 1
+                  when 'fail_json' then 0
+                  end
+      assert JSON.parse( mocked_obj.send(method) )["success"] == suc_value
+      assert JSON.parse( {"success" => suc_value}.send(method) )["success"] == suc_value
     end
   end
-
-  define_test_methods
 end
