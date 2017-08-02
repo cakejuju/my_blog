@@ -1,5 +1,5 @@
-require_relative './test_basic'
-require_relative '../helpers/hash_extension'
+require_relative '../test_basic'
+require_relative '../../helpers/hash_extension'
 require 'active_record'
 class HashTest < TestBasic
   INSTANCE_METHODS_NAME = %w[ suc_json fail_json ]

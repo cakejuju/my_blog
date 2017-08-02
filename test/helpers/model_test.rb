@@ -1,7 +1,7 @@
 # 测试辅助类 该类可以连接测试数据库并用自动删除测试中产生的数据
-require_relative './test_db_conn' 
+require_relative '../test_db_conn' 
 # 要测试的文件
-require_relative '../helpers/model_helper'
+require_relative '../../helpers/model_helper'
 
 class ActiverecordBaseTest < TestDbConn
   # 测试给 ActiveRecord::Base 添加的方法
