@@ -1,4 +1,4 @@
-require_relative './test_helper'
+require_relative './test_basic'
 require_relative '../helpers/string_extension'
 class StringTest < TestBasic
 

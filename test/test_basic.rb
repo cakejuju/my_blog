@@ -4,17 +4,10 @@ ENV['RACK_ENV'] = 'test' # ensure env is test
 require 'minitest/autorun'
 require 'rack/test'
 
-# require 'database_cleaner'
-# DatabaseCleaner.strategy = :transaction
-
 class TestBasic < Minitest::Test
   include Rack::Test::Methods
   def setup
   end
-
-  # def teardown
-  #   DatabaseCleaner.clean
-  # end
 
   # 测试所有 respond 的方法
   def test_response_to_methods
@@ -27,8 +20,5 @@ class TestBasic < Minitest::Test
   def mocked_obj
     @class_name.send(:new)
   end
-
-
-
 end
 

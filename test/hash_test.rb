@@ -1,12 +1,12 @@
-require_relative './test_helper'
+require_relative './test_basic'
 require_relative '../helpers/hash_extension'
 require 'active_record'
 class HashTest < TestBasic
-  METHODS_NAME = %w[ suc_json fail_json ]
+  INSTANCE_METHODS_NAME = %w[ suc_json fail_json ]
 
   def setup
     super
-    @methods_names = METHODS_NAME
+    @methods_names = INSTANCE_METHODS_NAME
     @class_name = Hash
   end
 
@@ -26,7 +26,7 @@ class HashTest < TestBasic
   #   assert JSON.parse({"success" => 0}.fail_json)["success"] == 0
   # end
 
-  METHODS_NAME.each do |method|
+  INSTANCE_METHODS_NAME.each do |method|
     define_method ("test_#{method}") do 
       suc_value = case method
                   when 'suc_json' then 1
