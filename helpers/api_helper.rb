@@ -1,5 +1,4 @@
-class  MyApp
-
+module ApiHelper
   # 将所有 api 包围 begin rescure
   def api_should(&block)
     begin
@@ -101,7 +100,7 @@ class  MyApp
     end
   end
 
-  private
+  # private
   # 注意 group 只能是 id
   # related_object => {through_model: 'Pt', related_model: 'Tag', key: 'tag_id', value: [1,2,3], group: 'post_id'}
   def get_ids(model, related_object)
@@ -254,8 +253,8 @@ class  MyApp
     
     upyun.getlist(url)
   end
-
-
-
-
 end
+
+# class  MyApp
+  
+# end

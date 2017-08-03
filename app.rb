@@ -30,7 +30,10 @@ require 'upyun' # 又拍云 SDK
 #     return [status, headers, body]
 #   end
 # end
+
+Dir['./helpers/*.rb'].each { |file| require_relative file }
 class MyApp < Sinatra::Application
+  include ApiHelper
   # use Timing
   set :protection, :except => :json_csrf # 使前端ajax可以跨域访问 开发使用,在生产环境用nginx做代理
   configure do
@@ -62,7 +65,6 @@ class MyApp < Sinatra::Application
 end
 
 
-Dir['./helpers/*.rb'].each { |file| require_relative file }
 
 # env = ENV['RACK_ENV'] ? ENV['RACK_ENV'] : 'development'
 env = ENV['RACK_ENV'] || 'development'

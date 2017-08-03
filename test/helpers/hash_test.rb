@@ -11,7 +11,7 @@ class HashTest < TestBasic
   end
 
   # define_test_methods
-  # 定义类方法达到定义一下两个方法的作用
+  # 定义类方法达到定义以下两个方法的作用
   # 注意必须先有此类方法才能调用(按照代码的顺序)
 
   # def test_suc_json
