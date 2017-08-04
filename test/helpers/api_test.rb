@@ -8,7 +8,7 @@ class ApiHelperTest < TestDbConn
     super
     @methods_names = %w[ api_should model_get_data jwt_encode
                          jwt_decode SHA1 MD5 current_member 
-                         polish_comment login_member_info 
+                         polish_comment login_member_info plural_name
                          up_upload init_UPyun show_image_cloud_file_lists ]
   end
 
@@ -28,8 +28,23 @@ class ApiHelperTest < TestDbConn
     assert JSON.parse(result).has_key?("success") == true
   end
 
+  def test_plural_name
+    assert mocked_obj.method(:plural_name).arity == 1 # 参数
+    assert mocked_obj.send(:plural_name, Tag) == 'tags'
+  end
+
+  def str2model(str)
+    str.to_s.constantize
+  end
+
+  def test_str2model
+    assert mocked_obj.method(:str2model).arity == 1 # 参数
+  end
+
   def mocked_obj
     Object.new.extend(ApiHelper)
   end
+
+
 end
 

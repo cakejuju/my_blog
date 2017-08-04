@@ -100,35 +100,6 @@ module ApiHelper
     end
   end
 
-  # private
-  # 注意 group 只能是 id
-  # related_object => {through_model: 'Pt', related_model: 'Tag', key: 'tag_id', value: [1,2,3], group: 'post_id'}
-  def get_ids(model, related_object)
-    # 中间模型
-    through_model = str2model(related_object[:through_model]) # Pt Pt.where(tag_id: [1,2]).group(:post_id).size.keys
-    # 关联的模型 查询条件模型
-    related_model = str2model(related_object[:related_model]) # Tag 
-
-    key = related_object[:key]
-    value = related_object[:value]
-    group = related_object[:group]
-
-    # 被 group 的模型 id, 即要得出数据的模型
-    grouped_model_ids = through_model.where(key => value).group(group).size.keys
-    # p grouped_model_ids
-    objs = model.where(id: grouped_model_ids)
-    new_ids = []
-    objs.each do |obj|
-      related_ids = obj.send(plural_name(related_model)).group(:id).size.keys
-
-      if value - related_ids == []
-        new_ids << obj.id
-      end
-    end
-
-    new_ids
-  end
-
   def plural_name(model)
     ActiveModel::Naming.plural(model)
   end
@@ -252,6 +223,35 @@ module ApiHelper
     upyun = init_UPyun
     
     upyun.getlist(url)
+  end
+
+  private
+  # 注意 group 只能是 id
+  # related_object => {through_model: 'Pt', related_model: 'Tag', key: 'tag_id', value: [1,2,3], group: 'post_id'}
+  def get_ids(model, related_object)
+    # 中间模型
+    through_model = str2model(related_object[:through_model]) # Pt Pt.where(tag_id: [1,2]).group(:post_id).size.keys
+    # 关联的模型 查询条件模型
+    related_model = str2model(related_object[:related_model]) # Tag 
+
+    key = related_object[:key]
+    value = related_object[:value]
+    group = related_object[:group]
+
+    # 被 group 的模型 id, 即要得出数据的模型
+    grouped_model_ids = through_model.where(key => value).group(group).size.keys
+    # p grouped_model_ids
+    objs = model.where(id: grouped_model_ids)
+    new_ids = []
+    objs.each do |obj|
+      related_ids = obj.send(plural_name(related_model)).group(:id).size.keys
+
+      if value - related_ids == []
+        new_ids << obj.id
+      end
+    end
+
+    new_ids
   end
 end
 
