@@ -105,7 +105,8 @@ module ApiHelper
   end
 
   def str2model(str)
-    str.to_s.constantize
+    # str.to_s.constantize
+    Object.const_get str.to_s
   end
 
   def jwt_encode(data)

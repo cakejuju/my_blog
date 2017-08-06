@@ -33,18 +33,18 @@ class ApiHelperTest < TestDbConn
     assert mocked_obj.send(:plural_name, Tag) == 'tags'
   end
 
-  def str2model(str)
-    str.to_s.constantize
-  end
-
   def test_str2model
     assert mocked_obj.method(:str2model).arity == 1 # 参数
+
+    # 继承于 ActiveRecord::Base 所有子类 to_s 后每个测试该方法
+    ActiveRecord::Base.descendants.map(&:to_s).each do |model_name|
+     assert mocked_obj.str2model(model_name).is_a? Class
+    end
   end
 
   def mocked_obj
     Object.new.extend(ApiHelper)
   end
-
 
 end
 
