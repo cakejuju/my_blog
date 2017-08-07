@@ -8,23 +8,33 @@ module ApiHelper
     end
   end
 
+  # 用于给前后端分离的table获取数据
+  # {"limit"=>"10", "current_page"=>"1", 
+  #   "order_params"=>{"sort_by"=>"created_at", "order"=>"DESC"}, 
+  #   "period"=>{"begin_time"=>"Sun Feb 26 2017 17:06:31 GMT+0800 (CST)", 
+  #   "end_time"=>"Tue Feb 28 2017 23:59:59 GMT+0800 (CST)"}, 
+  #   "json_methods"=>[], 
+  #   "model"=>"Comment",  # 必传
+  #   "include_model"=>"post"}
   def model_get_data(params)
     begin
       params = params.with_indifferent_access # hash 可以用 symbol 或 string 取值
       p params
       # 获取limit, current_page , model, 必填参数
       limit = params[:limit].to_i
-      limit = 30 if limit == 0
+      limit = 10 if limit == 0
 
       current_page = params[:current_page].to_i
       current_page = 1 if current_page == 0
 
+      # TODO Object.constant_get
+      return {success: 0, msg: 'model参数不可为空'} unless params[:model].present?
       model = params[:model].to_s.constantize  # 得到对象模型
 
       period = params[:period]
 
       # 获取关联对象
-
+      # 根据多对多的关联模型数据取出该模型的数据
       data_ids = params[:related_object] ? get_ids(model, params[:related_object]) : nil
 
       if data_ids.present?
@@ -34,7 +44,7 @@ module ApiHelper
       end
       # p queried_data
       if period.present?
-        queried_data = queried_data.where(:created_at => period[:begin_time].to_datetime.to_datetime..period[:end_time].to_datetime.to_datetime)
+        queried_data = queried_data.where(:created_at => period[:begin_time].to_datetime..period[:end_time].to_datetime)
       end
 
       include_model = params[:include_model]

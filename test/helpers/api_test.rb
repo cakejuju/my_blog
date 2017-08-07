@@ -42,6 +42,52 @@ class ApiHelperTest < TestDbConn
     end
   end
 
+  def test_model_get_data
+    params = {"invliad"=>"invliad"}
+
+    post = Post.create!(title: '测试文章', content: '测试内容') 
+    post2 = Post.create!(title: '测试文章2', content: '测试内容2') 
+    # 创建 15 条评论
+    i = 1
+    loop do
+      # comment = Comment.create!(post_id: post.id, content: "测试评论#{i.to_s}") 
+      tag = Tag.create!(name: "测试标签#{i.to_s}")
+      Pt.create!(post_id: post.id, tag_id: tag.id)
+      i += 1
+      break if i == 15  
+    end
+    
+    # 1. 测试必传参数 model
+    assert mocked_obj.model_get_data(params) == {success: 0, msg: 'model参数不可为空'}
+    # 2. 测试默认 limit 为 10 current_page 为 1
+    params.merge!({"model"=>"Tag"})
+    assert mocked_obj.model_get_data(params)[:json_data].size == 10
+    # 3. sort_by 这边测试 id 降序 
+    params.merge!({"order_params"=>{"sort_by"=>"id", "order"=>"DESC"}})
+    json_data = mocked_obj.model_get_data(params)[:json_data]
+    assert json_data[0]['id'] > json_data[9]['id']
+    # 4. 关联模型查找 从关联表中的 key为 related_object[:key] 中获得 value 为 related_object[:value] 的对象的
+    #    related_object[:group]的对象
+    related_query_params = {"related_object" => 
+                            { through_model: 'Pt', 
+                              related_model: 'Tag', 
+                              key: 'tag_id', 
+                              value: Tag.all.group(:id).size.keys, 
+                              group: 'post_id'},
+                            "model"=>"Post"  
+                            }
+    params.merge!(related_query_params)
+    assert mocked_obj.model_get_data(params)[:json_data][0]['id'] = post.id
+    # 5. query_params => {query_params: {"title" => "测试文章"}}
+    params.merge!({"query_params" => {"title" => "测试文章"}})
+    assert mocked_obj.model_get_data(params)[:json_data][0]['id'] = post.id
+    params.merge!({"query_params" => {"title" => "测试文章不存在的"}})
+    assert mocked_obj.model_get_data(params)[:json_data].size == 0
+    # 6. {"fuzzy_query_params" => {"title" => '测试'}}
+    params = { "fuzzy_query_params" => {"title" => '测试'}, "model"=>"Post" }
+    assert mocked_obj.model_get_data(params)[:json_data].size == 2
+  end
+
   def mocked_obj
     Object.new.extend(ApiHelper)
   end
