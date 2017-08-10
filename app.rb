@@ -78,9 +78,7 @@ ActiveRecord::Base.establish_connection(
 )
 
 # 导入所有 api routes 这是使用打开类添加路由
-%w[ ./api_routes/*.rb  ./api_routes/admin/*.rb 
-    ./models/*.rb ]
-.each do |path|
+%w[./api_routes/*.rb  ./api_routes/admin/*.rb  ./models/*.rb].each do |path|
   Dir[path].each { |file| require_relative file }
 end
 
