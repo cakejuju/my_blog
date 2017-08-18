@@ -48,10 +48,6 @@ server {
 
     location /api/ {
        proxy_pass  http://127.0.0.1:9292/; # 与后端项目启动端口保持一致
-       add_header 'Access-Control-Allow-Origin' '*';
-       add_header 'Access-Control-Allow-Credentials' 'true';
-       add_header 'Access-Control-Allow-Methods' 'GET';
-       add_header 'Access-Control-Allow-Methods' 'POST';
     }
 
     location / {
