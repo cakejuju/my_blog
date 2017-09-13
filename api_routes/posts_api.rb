@@ -2,6 +2,10 @@ class MyApp < Sinatra::Application
 
   post '/get_posts' do
     api_should do
+      # 非 admin 只能看公开的 post
+      @params[:query_params] ||= {}
+      @params[:query_params].merge!({permission: 'public'}) unless is_admin?
+
       @params.merge!({relation_data: true, model: 'Post'})
 
       model_data = model_get_data(@params)

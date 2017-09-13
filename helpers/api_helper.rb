@@ -64,7 +64,7 @@ module ApiHelper
 
       # 得到查询参数
       query_params = params[:query_params]
-
+      p query_params
       if query_params.present?
         query_params.each do |key, value|
           value = value == 'nil' ? nil : (value.is_a?(Array) ?  value.split(',') : value)
@@ -163,6 +163,10 @@ module ApiHelper
     else 
       nil
     end
+  end
+
+  def is_admin?
+    current_member ? current_member.is_master : false
   end
   
   # 评论优化
