@@ -12,6 +12,19 @@ class MyApp < Sinatra::Application
   options '/upload/head_img' do 
   end
 
+  post '/upload/photography' do 
+    api_should do
+      tempfile = @params['file']['tempfile']
+      
+      {file_path: tempfile.path} 
+    end
+  end
+
+  options '/upload/photography' do 
+  end
+
+
+
   post '/upload/posts_img' do 
     tempfile_path = @params['file']['tempfile'].path
 
@@ -23,7 +36,8 @@ class MyApp < Sinatra::Application
     # :"image-width"=>800, :url=>"/production/posts/RackMultipart20170601-70335-phafu7.png", 
     # :time=>1496287066, :message=>"ok", :mimetype=>"image/png", 
     # :request_id=>"09fa82255d7f12add8c3fc28d4fdac6f"}
-    res[:code] == 200 ? res.merge!({file_path: "#{Settings.UPyun.url_prefix+res[:url]}"} ).suc_json : res.fail_json  
+    p res
+    res[:code] == 200 ? res.suc_json : res.fail_json  
   end
 
   options '/upload/posts_img' do 

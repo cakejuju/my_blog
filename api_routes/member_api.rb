@@ -38,8 +38,8 @@ class MyApp < Sinatra::Application
         res = up_upload(tempfile_path, cloud_save_path)
         # => {:sign=>"229ddc675e70d734c703502b1c12668e", :code=>200, :file_size=>5239, :url=>"/2017/05/18/yace_jiami.rb", :time=>1495099874, :message=>"ok", :mimetype=>"text/plain; charset=utf-8", :request_id=>"15f8307656c8a18741dcdc9925c3cde2"}
         return {msg: "图片上传失败了: #{res[:message]}"}.fail_json unless res[:code] == 200
-
-        head_img_url = "#{Settings.UPyun.url_prefix}#{res[:url]}"
+        
+        head_img_url = get_img_url_from_cloud_callback(res)
       else 
         head_img_url = "/static/github.png" 
       end

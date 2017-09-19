@@ -203,6 +203,11 @@ module ApiHelper
     {jwt: jwt, current_member: data}.suc_json 
   end
 
+  # 从又拍云回调中获得图片 url
+  def get_img_url_from_cloud_callback(res)
+    Settings.UPyun.url_prefix + res[:url]
+  end
+
   # 又拍云上传
   def up_upload(local_file_path, cloud_save_path)
     config = FlexibleObject.new(Settings.UPyun)
