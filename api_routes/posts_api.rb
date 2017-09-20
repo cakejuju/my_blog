@@ -46,10 +46,7 @@ class MyApp < Sinatra::Application
 
       model_data.merge!(json_data: json_data)
     end
-
   end  
-
-
 
   post '/get_posts_by_id' do
     api_should do

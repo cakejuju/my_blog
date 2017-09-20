@@ -10,16 +10,15 @@ gem 'activerecord'
 
 gem "sinatra-activerecord"
 
-# gem "sqlite3"
 gem "sqlite3", :platform => [:ruby, :mswin, :mingw]
 
 gem 'rake'
 
 gem 'puma'
 
-group :development do
-  gem "rerun"  # change the file and auto reload
-end
+gem 'faraday'
+
+gem 'typhoeus', '~> 1.1'
 
 gem 'jwt'
 
@@ -31,7 +30,9 @@ gem 'upyun', '~> 1.0.8' # 又拍云 SDK
 
 gem 'settingslogic' # parse yml to hash
 
-# gem 'logger'
+group :development do
+  gem "rerun"  # change the file and auto reload
+end
 
 group :test do
   gem "minitest"

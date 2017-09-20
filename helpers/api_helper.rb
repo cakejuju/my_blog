@@ -1,4 +1,7 @@
+require_relative 'http'
+
 module ApiHelper
+  include HttpSender
   # 将所有 api 包围 begin rescure
   def api_should(&block)
     begin
@@ -89,7 +92,7 @@ module ApiHelper
       offset = limit*(current_page - 1)  # 分页左边起始位置
 
       relation_data = queried_data.limit(limit).offset(offset)
-
+      
       as_json_options = {} # as_json 方法的选项 有.as_json( methods: [], only: [])
 
       as_json_options.merge!({methods: params[:json_methods]}) if params[:json_methods].present?
