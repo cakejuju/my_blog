@@ -5,4 +5,8 @@ class Photograph < ActiveRecord::Base
     return nil if exif == 'null'
     JSON.parse(exif)
   end
+
+  def shot_at
+    second_time_to_text(Time.now - self.created_at)
+  end
 end
